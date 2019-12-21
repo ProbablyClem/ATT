@@ -7,7 +7,7 @@ from random import *
 
 #Marche po
 ports = list(serial.tools.list_ports.comports())
-port="/dev/ttyACM1"
+port="/dev/ttyACM0"
 for p1 in ports:
     print(p1)
     if "Arduino" in p1:
@@ -36,15 +36,21 @@ def ascii():
         word = ""
         while len(word) < 7:
             word += ser.read()#`randint(0,1)`
-            print(word)
+            print(word[len(word)::-1]) # method 1
+
+        word=word[len(word)::-1]
         trueBin = int(word, base=2)
         trueBin = chr(trueBin)
 
         try:
-            keyboard.press(trueBin)
-            keyboard.release(trueBin)
-            keyboard.press(Key.enter)
-            keyboard.release(Key.enter)
+            if trueBin == '\n':
+                keyboard.press(Key.enter)
+                keyboard.release(Key.enter)
+            elif trueBin == '\b': #Might change
+            else:       
+                keyboard.press(trueBin)
+                keyboard.release(trueBin)
+            
         except:
             pass
 
